@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eksplorasi Minat dan Penjurusan Kelas X</title>
+<style>
+:root{--navy:#18384a;--teal:#267d78;--mint:#eaf5f2;--ink:#233449;--muted:#65758a;--line:#dce5e8}
+*{box-sizing:border-box}body{margin:0;background:#f4f7fa;color:var(--ink);font-family:Arial,sans-serif;line-height:1.55}
+header{background:linear-gradient(135deg,#18384a,#267d78);color:white;text-align:center;padding:42px 18px}
+header .tag{font-size:12px;letter-spacing:1px;border:1px solid #ffffff70;padding:6px 12px;border-radius:30px}
+header h1{font-size:clamp(27px,5vw,42px);line-height:1.15;margin:20px auto 10px;max-width:760px}
+header p{max-width:670px;margin:auto;color:#e3f0ef}
+main{max-width:900px;margin:24px auto;padding:0 15px 50px}.card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:22px;margin:16px 0;box-shadow:0 5px 20px #1b34450a}
+h2{font-size:21px;margin:0 0 8px}.sub{color:var(--muted);margin:0}.note{background:#fff8e9;border-left:4px solid #e6b95f;padding:12px 14px;border-radius:8px;margin-top:15px;font-size:14px}
+input[type=text],textarea{width:100%;border:1px solid #cbd8dc;border-radius:10px;padding:12px;font:inherit;color:var(--ink)}textarea{min-height:82px;resize:vertical}.field{margin-top:15px}.field label,.qtitle{display:block;font-weight:700;margin-bottom:7px}
+.progressrow{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-top:18px}.track{height:8px;background:#e8eeee;border-radius:20px;overflow:hidden;margin:7px 0 15px}.bar{height:100%;background:var(--teal);width:0;transition:.2s}
+.q{padding:17px 0;border-bottom:1px solid #edf0f2}.q:last-child{border:0}.qtitle{margin-bottom:10px}
+.option{display:flex;align-items:flex-start;gap:10px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;margin:8px 0;cursor:pointer;font-weight:400}
+.option:has(input:checked){border-color:var(--teal);background:var(--mint)}.option input{margin-top:5px;accent-color:var(--teal)}
+button{border:0;border-radius:10px;padding:13px 18px;font-size:15px;font-weight:700;cursor:pointer}.primary{background:var(--teal);color:#fff}.secondary{background:#edf2f3;color:var(--ink)}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+#result{display:none}.score{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:15px 0}.scorebox{background:#f3f7f8;border:1px solid var(--line);padding:13px;border-radius:12px}.scorebox strong{display:block;font-size:24px}.meter{height:8px;background:#e1e9eb;border-radius:20px;margin-top:7px;overflow:hidden}.meter span{display:block;height:100%;background:var(--teal)}
+.resultpanel{background:var(--mint);border-radius:13px;padding:17px;margin:14px 0}.resultpanel h3{margin:0 0 7px}.small{font-size:13px;color:var(--muted)}.answer{padding:12px 0;border-bottom:1px solid #e9eeee}.answer:last-child{border:0}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:10px 15px 30px}
+@media(max-width:600px){.card{padding:17px}.score{grid-template-columns:1fr}}
+@media print{body{background:white;font-size:11pt}header{padding:20px}main{max-width:none;margin:0;padding:0}.card{box-shadow:none;border:0;padding:10px;margin:5px 0}button,.no-print,footer{display:none!important}#result{display:block!important}.q,.answer{break-inside:avoid}.resultpanel{break-inside:avoid}}
+</style></head><body>
+<header><span class="tag">LAYANAN BIMBINGAN DAN KONSELING · KELAS X</span>
+<h1>Kenali Dirimu,<br>Temukan Arah Pilihanmu</h1>
+<p>Eksplorasi minat dan potensi sebelum memilih bidang Kesehatan, Teknik, atau Humaniora di kelas XI.</p></header>
+<main>
+<section class="card"><h2>Selamat datang!</h2><p class="sub">Jawab 15 pertanyaan berikut sesuai dengan hal yang paling menarik bagimu. Pilih satu jawaban pada setiap pertanyaan.</p>
+<div class="note"><b>Perlu diingat:</b> Tidak ada jawaban benar atau salah. Jawablah dengan jujur, bukan karena mengikuti teman. Hasil ini merupakan bahan refleksi awal, bukan tes psikologi, tes bakat, atau keputusan penjurusan otomatis.</div>
+<div class="field"><label for="student">Nama siswa</label><input id="student" type="text" placeholder="Masukkan nama"></div>
+<div class="field"><label for="kelas">Kelas</label><input id="kelas" type="text" placeholder="Contoh: X-1"></div>
+</section>
+<section class="card"><h2>Bagian 1 · Eksplorasi minat</h2><p class="sub">Pilih satu jawaban yang paling menggambarkan dirimu.</p>
+<div class="progressrow"><span>Progres pengisian</span><span id="count">0 dari 15 terjawab</span></div><div class="track"><div class="bar" id="bar"></div></div>
+<form id="quiz"><div id="questions"></div></form>
+<div class="actions no-print"><button class="primary" id="analyze" type="button">Lihat hasil refleksi</button><button class="secondary" id="reset" type="button">Ulangi jawaban</button></div>
+<p class="small">Semua pertanyaan perlu dijawab agar hasil kecenderungan dapat dihitung.</p>
+</section>
+<section class="card" id="result"><h2>Hasil eksplorasi dirimu</h2><p class="sub">Berikut ringkasan kecenderungan berdasarkan pilihan jawabanmu.</p><div id="resultContent"></div>
+<div class="note"><b>Catatan untuk siswa:</b> Skor tertinggi menunjukkan bidang yang paling sering kamu pilih dalam kegiatan ini. Skor bukan ukuran kecerdasan atau kemampuan. Gunakan hasil ini untuk berdiskusi dengan guru BK dan pertimbangkan juga nilai akademik, pengalaman, minat yang berkembang, serta informasi tentang pembelajaran di setiap bidang.</div>
+<div class="actions no-print"><button class="primary" type="button" onclick="window.print()">Unduh / Cetak hasil sebagai PDF</button><button class="secondary" type="button" id="back">Periksa jawaban</button></div>
+<p class="small no-print">Saat jendela cetak terbuka, pilih tujuan/printer “Save as PDF” atau “Simpan sebagai PDF”, lalu tekan Simpan.</p>
+</section>
+</main><footer>Media eksplorasi diri · Bimbingan dan Konseling</footer>
+<script>
+const questions = [["Ketika diberikan tugas proyek kelompok, bagian apa yang paling ingin kamu kerjakan?", [["Mencari informasi tentang kehidupan manusia, budaya, atau masyarakat.", "H"], ["Mencoba membuat atau merancang sesuatu agar bisa berfungsi.", "T"], ["Mencari tahu bagaimana tubuh manusia bekerja dan menjaga kesehatan.", "K"]]], ["Jika memiliki waktu luang untuk mempelajari sesuatu, mana yang paling membuatmu penasaran?", [["Cara kerja mesin, komputer, dan teknologi.", "T"], ["Cara manusia berpikir, berperilaku, dan berinteraksi.", "H"], ["Penyakit, kesehatan, dan cara kerja organ tubuh.", "K"]]], ["Ketika melihat suatu permasalahan di lingkungan sekitar, hal apa yang paling menarik perhatianmu?", [["Bagaimana teknologi atau alat dapat membantu menyelesaikan masalah tersebut.", "T"], ["Bagaimana kondisi kesehatan dan kesejahteraan orang yang terdampak.", "K"], ["Apa penyebab sosial dan perilaku manusia di balik permasalahan tersebut.", "H"]]], ["Jika diminta memilih kegiatan ekstrakurikuler atau komunitas, mana yang paling menarik?", [["Klub diskusi, jurnalistik, debat, atau bahasa.", "H"], ["Klub sains, teknologi, robotik, atau desain.", "T"], ["Kegiatan kesehatan, PMR, atau edukasi kesehatan.", "K"]]], ["Pelajaran atau topik apa yang membuatmu ingin mencari tahu lebih jauh?", [["Biologi, tubuh manusia, dan kesehatan.", "K"], ["Sejarah, bahasa, sosiologi, dan budaya.", "H"], ["Fisika, informatika, matematika, dan teknologi.", "T"]]], ["Jika diberi kesempatan membuat sebuah proyek, apa yang ingin kamu hasilkan?", [["Karya tulis, kampanye sosial, atau kegiatan edukasi masyarakat.", "H"], ["Alat, aplikasi, atau rancangan teknologi sederhana.", "T"], ["Media edukasi kesehatan atau proyek tentang tubuh manusia.", "K"]]], ["Ketika temanmu mengalami kesulitan, hal apa yang biasanya ingin kamu lakukan?", [["Membantu memahami perasaan dan sudut pandangnya.", "H"], ["Mencari cara praktis atau alat yang dapat membantu masalahnya.", "T"], ["Membantu mencari informasi tentang kesehatan dan kebugarannya.", "K"]]], ["Kegiatan mana yang paling membuatmu tertarik untuk dicoba?", [["Mengamati, merancang, dan menguji cara kerja sesuatu.", "T"], ["Mengamati perilaku dan berinteraksi dengan berbagai orang.", "H"], ["Mempelajari kesehatan tubuh dan melakukan kegiatan edukasi kesehatan.", "K"]]], ["Jika harus mengikuti kunjungan belajar, tempat mana yang ingin kamu kunjungi?", [["Museum sejarah, lembaga sosial, atau pusat kebudayaan.", "H"], ["Laboratorium, pusat teknologi, atau tempat produksi.", "T"], ["Rumah sakit, laboratorium kesehatan, atau pusat penelitian kesehatan.", "K"]]], ["Apa yang paling membuatmu merasa puas setelah menyelesaikan suatu kegiatan?", [["Berhasil memahami orang lain atau menyampaikan sebuah gagasan.", "H"], ["Berhasil membuat sesuatu bekerja sesuai rencana.", "T"], ["Berhasil membantu orang memahami atau menjaga kesehatannya.", "K"]]], ["Jika menghadapi tantangan yang belum pernah kamu temui, apa yang cenderung kamu lakukan?", [["Mencari tahu penyebab dan dampaknya terhadap manusia atau lingkungan sosial.", "H"], ["Mencoba berbagai cara sampai menemukan solusi teknis.", "T"], ["Mencari informasi ilmiah terkait kesehatan atau tubuh manusia.", "K"]]], ["Topik diskusi mana yang paling ingin kamu bahas?", [["Perkembangan teknologi dan inovasi masa depan.", "T"], ["Kesehatan mental, kesehatan tubuh, dan kualitas hidup.", "K"], ["Pendidikan, budaya, komunikasi, dan kehidupan sosial.", "H"]]], ["Jika diminta memilih bacaan atau video edukasi, apa yang akan kamu pilih?", [["Video tentang cara kerja alat, teknologi, atau penemuan baru.", "T"], ["Video tentang kehidupan manusia, budaya, atau fenomena sosial.", "H"], ["Video tentang kesehatan, penyakit, atau penelitian medis.", "K"]]], ["Kamu ingin mengembangkan kemampuan dalam hal apa?", [["Menganalisis, merancang, dan memecahkan masalah teknis.", "T"], ["Memahami manusia, berkomunikasi, dan menyampaikan gagasan.", "H"], ["Memahami tubuh manusia dan menerapkan pengetahuan kesehatan.", "K"]]], ["Bayangkan kamu memiliki kesempatan berkontribusi untuk masyarakat. Hal apa yang paling ingin kamu lakukan?", [["Membantu meningkatkan kualitas kesehatan masyarakat.", "K"], ["Menciptakan inovasi atau teknologi yang bermanfaat.", "T"], ["Meningkatkan pemahaman, pendidikan, dan kehidupan sosial masyarakat.", "H"]]]];
+const labels={K:"Kesehatan",T:"Teknik",H:"Humaniora"};
+const descriptions={
+K:{intro:"Jawabanmu paling sering mengarah pada bidang Kesehatan. Kamu tampak tertarik mempelajari tubuh manusia, kesehatan, dan upaya menjaga kesejahteraan.",potential:["Rasa ingin tahu tentang tubuh manusia dan ilmu kehidupan","Kepedulian terhadap kesehatan dan kesejahteraan orang lain","Ketertarikan pada pengamatan, informasi ilmiah, dan edukasi kesehatan"],explore:["Biologi dan cara kerja organ tubuh","Kesehatan masyarakat dan edukasi kesehatan","Beragam profesi serta kegiatan di bidang kesehatan"]},
+T:{intro:"Jawabanmu paling sering mengarah pada bidang Teknik. Kamu tampak tertarik pada teknologi, proses merancang, mencoba, dan menemukan solusi praktis.",potential:["Ketertarikan pada cara kerja alat dan teknologi","Kecenderungan mencoba serta merancang solusi","Minat mengembangkan kreativitas dan pemecahan masalah"],explore:["Teknologi, komputer, mesin, dan desain","Eksperimen, perancangan, dan proyek sederhana","Dampak teknologi dalam kehidupan sehari-hari"]},
+H:{intro:"Jawabanmu paling sering mengarah pada bidang Humaniora. Kamu tampak tertarik memahami manusia, perilaku, komunikasi, budaya, dan kehidupan sosial.",potential:["Ketertarikan memahami perilaku dan sudut pandang orang lain","Minat pada komunikasi, gagasan, dan diskusi","Kepekaan terhadap fenomena sosial dan kehidupan masyarakat"],explore:["Bahasa, komunikasi, sejarah, dan budaya","Perilaku manusia, pendidikan, dan kehidupan sosial","Kegiatan diskusi, menulis, observasi, atau proyek sosial"]}
+};
+const qroot=document.getElementById("questions");
+questions.forEach((q,i)=>{
+ const div=document.createElement("div");div.className="q";
+ const title=document.createElement("div");title.className="qtitle";title.textContent=(i+1)+". "+q[0];div.append(title);
+ q[1].forEach((opt,j)=>{
+  const lab=document.createElement("label");lab.className="option";
+  const radio=document.createElement("input");radio.type="radio";radio.name="q"+i;radio.value=opt[1];radio.addEventListener("change",progress);
+  const span=document.createElement("span");span.textContent=opt[0];lab.append(radio,span);div.append(lab);
+ });qroot.append(div);
+});
+function progress(){const n=questions.filter((_,i)=>document.querySelector('input[name="q'+i+'"]:checked')).length;document.getElementById("count").textContent=n+" dari 15 terjawab";document.getElementById("bar").style.width=(n/15*100)+"%";}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+document.getElementById("analyze").addEventListener("click",()=>{
+ const chosen=questions.map((_,i)=>document.querySelector('input[name="q'+i+'"]:checked'));
+ if(chosen.some(x=>!x)){alert("Masih ada pertanyaan yang belum dijawab. Silakan lengkapi semua 15 pertanyaan.");return;}
+ const scores={K:0,T:0,H:0};chosen.forEach(x=>scores[x.value]++);
+ const max=Math.max(...Object.values(scores));const tops=Object.keys(scores).filter(k=>scores[k]===max);
+ const name=document.getElementById("student").value.trim()||"Tidak diisi";
+ const kelas=document.getElementById("kelas").value.trim()||"Tidak diisi";
+ let out=`<div class="resultpanel"><b>Nama:</b> ${esc(name)}<br><b>Kelas:</b> ${esc(kelas)}<br><b>Kecenderungan tertinggi:</b> ${tops.map(k=>labels[k]).join(" dan ")}</div><div class="score">`;
+ ["K","T","H"].forEach(k=>{out+=`<div class="scorebox"><span>${labels[k]}</span><strong>${scores[k]} / 15</strong><div class="meter"><span style="width:${scores[k]/15*100}%"></span></div></div>`;});
+ out+="</div>";
+ if(tops.length===1){
+  const d=descriptions[tops[0]];
+  out+=`<div class="resultpanel"><h3>Refleksi kecenderungan: ${labels[tops[0]]}</h3><p>${d.intro}</p><b>Potensi yang dapat dikembangkan</b><ul>${d.potential.map(x=>"<li>"+x+"</li>").join("")}</ul><b>Bidang atau topik yang dapat dieksplorasi</b><ul>${d.explore.map(x=>"<li>"+x+"</li>").join("")}</ul><p><b>Umpan balik:</b> Bidang ${labels[tops[0]]} layak kamu kenali lebih jauh. Ini belum berarti kamu harus memilih bidang tersebut. Cari pengalaman dan informasi tambahan untuk memastikan apakah kegiatan belajar di bidang ini benar-benar sesuai dengan minat dan tujuanmu.</p></div>`;
+ }else{
+  out+=`<div class="resultpanel"><h3>Refleksi kecenderungan yang beragam</h3><p>Jawabanmu menunjukkan ketertarikan yang sama kuat pada ${tops.map(k=>labels[k]).join(" dan ")}. Kamu memiliki beberapa bidang yang layak dieksplorasi. Cobalah mencari tahu kegiatan belajar apa yang paling ingin kamu jalani dan kemampuan apa yang ingin kamu kembangkan.</p><p>Belum perlu memaksakan satu pilihan. Cari pengalaman, baca informasi jurusan, dan diskusikan pilihanmu dengan guru BK.</p></div>`;
+ }
+ out+=`<h3>Pertanyaan refleksi lanjutan</h3><ol>
+ <li>Apakah hasil ini sesuai dengan hal-hal yang selama ini kamu sukai? Mengapa?</li>
+ <li>Apakah ada bidang yang menarik bagimu tetapi belum pernah kamu coba?</li>
+ <li>Kemampuan apa yang sudah kamu miliki dan dapat mendukung bidang pilihanmu?</li>
+ <li>Hal apa yang masih perlu kamu pelajari atau kembangkan?</li>
+ <li>Apakah pilihanmu berasal dari keinginan sendiri atau pengaruh orang lain?</li>
+ <li>Jika mempelajari bidang tersebut selama dua tahun ke depan, apakah kamu tertarik menjalaninya? Mengapa?</li>
+ </ol><h3>Jawaban pilihanmu</h3>`;
+ questions.forEach((q,i)=>{const opt=q[1].find(o=>o[1]===chosen[i].value);out+=`<div class="answer"><b>${i+1}. ${esc(q[0])}</b><br>${esc(opt[0])}</div>`;});
+ document.getElementById("resultContent").innerHTML=out;
+ const r=document.getElementById("result");r.style.display="block";r.scrollIntoView({behavior:"smooth"});
+});
+document.getElementById("reset").addEventListener("click",()=>{if(!confirm("Hapus semua jawaban dan mulai dari awal?"))return;document.getElementById("quiz").reset();document.getElementById("student").value="";document.getElementById("kelas").value="";document.getElementById("result").style.display="none";progress();window.scrollTo({top:0,behavior:"smooth"});});
+document.getElementById("back").addEventListener("click",()=>document.getElementById("quiz").scrollIntoView({behavior:"smooth"}));
+</script></body></html>
